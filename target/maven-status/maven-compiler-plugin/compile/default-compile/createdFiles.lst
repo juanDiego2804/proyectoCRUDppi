@@ -1,0 +1,6 @@
+com\udg\products\services\ProductService.class
+com\udg\products\controllers\ProductController.class
+com\udg\products\repositories\ProductRepository.class
+com\udg\products\ProductsApplication.class
+com\udg\products\ServletInitializer.class
+com\udg\products\models\ProductModel.class

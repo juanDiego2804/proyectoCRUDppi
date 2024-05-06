@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <h1>Registro de Productos</h1>
+
+    <form>
+        <div class="mb-3 mt-3">
+            <label for="productBarcode" class="form-label">Código de barras:</label>
+            <input type="text" class="form-control" id="productBarcode" placeholder="Ingresa el código de barras" name="productBarcode" >
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="productName" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="productName" placeholder="Ingresa el nombre del producto" name="productName" >
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label for="productCategory" class="form-label">Categoría:</label>
+            <input type="text" class="form-control" id="productCategory" placeholder="Ingresa la categoria del producto" name="productCategory" >
+
+
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label for="productPrice" class="form-label">Precio:</label>
+            <input type="number" step="any" class="form-control" id="productPrice" placeholder="Ingrese el precio en pesos mexicanos" name="productPrice" >
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="productSupplier" class="form-label">Proveedor:</label>
+            <input type="text" class="form-control" id="productSupplier" placeholder="Ingrese el proveedor del producto" name="productSupplier">
+        </div>
+        <button type="button" class="btn btn-outline-success" onclick="productRegister()">Guardar</button>
+    </form>
+
+    <button onclick="window.location.href = 'getproducts.html';" style="position: fixed; bottom: 50px; right: 100px;" type="button" class="btn btn-primary btn-lg">Ver todos los productos</button>
+</div>
+<script>
+    function cleanScreen() {
+        document.getElementById("productName").value = "";
+        document.getElementById("productBarcode").value = "";
+        document.getElementById("productSupplier").value = "";
+        document.getElementById("productCategory").value = "";
+        document.getElementById("productPrice").value = "";
+    }
+
+    function productRegister() {
+
+        const formProductName = document.getElementById("productName").value;
+        const formProductBarcode = document.getElementById("productBarcode").value;
+        const formProductSupplier = document.getElementById("productSupplier").value;
+        const formProductCategory = document.getElementById("productCategory").value;
+        const formProductPrice = document.getElementById("productPrice").value;
+
+        const apiUrl = "http://productos-env.eba-qjwtpm3x.us-east-2.elasticbeanstalk.com/products";
+
+       //crear el objeto
+        const productObject = {
+            barcode : formProductBarcode,
+            name : formProductName,
+            supplier : formProductSupplier,
+            category : formProductCategory,
+            price : formProductPrice
+        };
+
+
+        // Configure the request
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productObject)
+        };
+            //llamar a la URL
+
+        // Make the POST request
+        fetch(apiUrl, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(productFromAPI => {
+                console.log('Success:', productFromAPI);
+                cleanScreen();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error here
+            });
+    }
+</script>
+</body>
+</html>
